@@ -1,0 +1,5 @@
+deployment_id,application_id,application_name,environment,deployed_at,status,version
+df001,app001,Auth Service,production,2025-09-21T12:04:00Z,success,v1.2.3
+df002,app002,Inventory API,production,2025-09-22T09:14:00Z,success,v2.1.0
+df003,app001,Auth Service,production,2025-09-25T15:22:00Z,failed,v1.2.4
+df004,app002,Inventory API,staging,2025-09-27T10:10:00Z,success,v2.1.1

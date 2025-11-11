@@ -1,0 +1,4 @@
+change_id,application_id,commit_id,commit_time,deploy_id,deploy_time,lead_time_hours
+chg001,app001,7dfab3,2025-09-20T09:00:00Z,df001,2025-09-21T12:04:00Z,27.07
+chg002,app002,bd9e21,2025-09-21T10:30:00Z,df002,2025-09-22T09:14:00Z,22.73
+chg003,app001,44ff12,2025-09-23T14:10:00Z,df003,2025-09-25T15:22:00Z,49.20
