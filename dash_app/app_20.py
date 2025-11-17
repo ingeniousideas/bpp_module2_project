@@ -10,13 +10,13 @@ df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/gapmi
 
 df_apps = pd.read_json('/home/lnx_workspaces/bpp_projects/bpp_module2_project/dash_app/data/json/applications.json')
 
-df_deploy = pd.read_json('/home/lnx_workspaces/bpp_projects/bpp_module2_project/dash_app/data/json/deployments.json')
+df_deploy = pd.read_json('/home/lnx_workspaces/bpp_projects/bpp_module2_project/dash_app/data/json/deployment_frequency.json')
 
-df_failure = pd.read_json('/home/lnx_workspaces/bpp_projects/bpp_module2_project/dash_app/data/json/failures.json')
+df_failure = pd.read_json('/home/lnx_workspaces/bpp_projects/bpp_module2_project/dash_app/data/json/change_fail.json')
 
 df_incident = pd.read_json('/home/lnx_workspaces/bpp_projects/bpp_module2_project/dash_app/data/json/incidents.json')
 
-df_lead = pd.read_json('/home/lnx_workspaces/bpp_projects/bpp_module2_project/dash_app/data/json/lead_times.json')
+df_lead = pd.read_json('/home/lnx_workspaces/bpp_projects/bpp_module2_project/dash_app/data/json/change_lead_time.json')
 
 # Initialize the app
 app = Dash()
@@ -84,7 +84,7 @@ app.layout = dmc.MantineProvider(
 		], fluid=True, style=grid),
 
 		dmc.Container([
-            dmc.Title("Deployment data", c="blue", order=3), # order is size of text
+            dmc.Title("Deployment Frequency", c="blue", order=3), # order is size of text
 
             # simple grid for the deployment components
             dmc.SimpleGrid([
