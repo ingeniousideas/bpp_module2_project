@@ -2,6 +2,22 @@
 
 Repository for the bpp apprenticeship module 2 assessment.
 
+## Applicaiton Development
+
+### Prototype Apps
+
+- dash_app/app_20.py
+- dash_app/app_minimal.py
+  - Retrives csv data from online Plotly repository.
+  - Single page with **Dropdown** and reactive **Line Graph**.
+
+- doraview/app.py
+  - Retrives csv data from online Plotly repository.
+  - Added dataframes that read frm **JSON files**.
+    - These are the **mock data**.
+  - Displays Plotly data in **Table** and **Bar Chart**.
+  - Displays **JSON** data only as **Tables**.
+
 ## DevOps Research Assessment (DORA)
 
 This is composed of four key metrics, that are divided into thorughput of software changes, and stability of software changes <https://dora.dev/guides/dora-metrics-four-keys/>.

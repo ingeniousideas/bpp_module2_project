@@ -8,8 +8,10 @@ load_figure_template("cyborg")
 
 # Initialize the Dash app
 app = Dash(__name__, use_pages=True, external_stylesheets=[dbc.themes.BOOTSTRAP])
+app.title = 'DORA Metrics'
 
-# Sidebar layout
+# Sidebar layout. This is referenced in the "Main app layout" below.
+# TODO: This could be moved into the 'components' directory.
 sidebar = html.Div(
     [
         html.H2("Pages", className="sidebar-header"),
@@ -44,4 +46,4 @@ app.layout = dbc.Container(
 server = app.server  # Expose Flask server for Gunicorn
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=8070)

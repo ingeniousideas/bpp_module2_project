@@ -20,6 +20,7 @@ df_lead = pd.read_json('/home/lnx_workspaces/bpp_projects/bpp_module2_project/da
 
 # Initialize the app
 app = Dash()
+app.title = 'app_20'
 
 style = {
     "height": 100,
@@ -156,4 +157,4 @@ def update_graph(col_chosen): # Takes the Input component_property value as y-ax
 
 # Run the app
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=8020)

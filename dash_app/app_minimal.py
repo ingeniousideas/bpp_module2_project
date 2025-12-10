@@ -5,6 +5,7 @@ import pandas as pd
 df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/gapminder_unfiltered.csv')
 
 app = Dash()
+app.title = 'app_minimal'
 
 # Requires Dash 2.17.0 or later
 app.layout = [
@@ -22,4 +23,4 @@ def update_graph(value):
     return px.line(dff, x='year', y='pop')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=8050)
