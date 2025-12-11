@@ -9,18 +9,18 @@ app.title = 'app_minimal'
 
 # Requires Dash 2.17.0 or later
 app.layout = [
-    html.H1(children='Title of Dash App', style={'textAlign':'center'}),
-    dcc.Dropdown(df.country.unique(), 'Canada', id='dropdown-selection'), # type: ignore
-    dcc.Graph(id='graph-content')
+	html.H1(children='Title of Dash App', style={'textAlign':'center'}),
+	dcc.Dropdown(df.country.unique(), 'Canada', id='dropdown-selection'), # type: ignore
+	dcc.Graph(id='graph-content')
 ]
 
 @callback(
-    Output('graph-content', 'figure'),
-    Input('dropdown-selection', 'value')
+	Output('graph-content', 'figure'),
+	Input('dropdown-selection', 'value')
 )
 def update_graph(value):
-    dff = df[df.country==value]
-    return px.line(dff, x='year', y='pop')
+	dff = df[df.country==value]
+	return px.line(dff, x='year', y='pop')
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8050)
+	app.run(debug=True, port=8050)
