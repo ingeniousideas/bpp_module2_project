@@ -1,49 +1,80 @@
+"""
+Basic Appshell with header and  navbar that collapses on mobile.
+Using reference from here: https://www.dash-mantine-components.com/components/appshell
+"""
+
 import dash
-from dash import Dash, html, dcc, dash_table
-from dash_bootstrap_templates import load_figure_template
-import dash_bootstrap_components as dbc
+import dash_mantine_components as dmc
+from dash import Dash, Input, Output, State, callback, dcc
+from dash_iconify import DashIconify
 
-# load a single bootstrap theme for plotly figure templates
-load_figure_template("cyborg")
+from components.dmc_sidebar import dmc_sidebar
 
-# Initialize the Dash app
-app = Dash(__name__, use_pages=True, external_stylesheets=[dbc.themes.BOOTSTRAP])
-app.title = 'DORA Metrics'
+app = Dash(__name__, use_pages=True, suppress_callback_exceptions=True)
 
-# Sidebar layout. This is referenced in the "Main app layout" below.
-# TODO: This could be moved into the 'components' directory.
-sidebar = html.Div(
-    [
-        html.H2("Pages", className="sidebar-header"),
-        html.Hr(),
-        # Dynamically create links for each page
-        dbc.Nav(
-            [
-                dbc.NavLink(
-                    page["name"], href=page["path"], active="exact"
-                ) for page in dash.page_registry.values()
-            ],
-            vertical=True,
-            pills=True,
-        ),
-    ],
-    className="sidebar",
+logo = "/home/lnx_workspaces/bpp_projects/bpp_module2_project/doraview/assests/hero-fourkeys.png"
+
+
+layout = dmc.AppShell(
+	[
+		dmc.AppShellHeader(
+			dmc.Group(
+				[
+					dmc.Burger(id="burger", size="sm", hiddenFrom="sm", opened=False),
+					dmc.Title("Lab DORA Metrics"),
+					dmc.ActionIcon(
+						DashIconify(icon="clarity:settings-line", width=20),
+						size="lg",
+						variant="subtle",
+						id="action-icon",
+						n_clicks=0,
+						mb=10,
+					),
+				],
+				h="100%",
+				px="md",
+			),
+		),
+
+		dmc.AppShellNavbar(
+			id="navbar",
+			children=[
+				"Navbar",
+				dmc_sidebar(),
+			],
+			p="md",
+
+		),
+		dmc.AppShellMain(
+			dash.page_container,
+		),
+	],
+	header={"height": 60},
+	padding="md",
+	navbar={
+		"width": 300,
+		"breakpoint": "sm",
+		"collapsed": {"mobile": True},
+	},
+	id="appshell",
 )
 
-# Main app layout
-app.layout = dbc.Container(
-    [dbc.Row([
-                dbc.Col(sidebar, width=2),  # Sidebar takes 2 columns width
-                dbc.Col(
-                    # Page content rendered here
-                    dash.page_container,
-                    width=10)
-            ])
-    ],
-    fluid=True)
+app.layout = dmc.MantineProvider(
+	defaultColorScheme="dark",
+	children=[layout]
+	)
+
+@callback(
+	Output("appshell", "navbar"),
+	Input("burger", "opened"),
+	State("appshell", "navbar"),
+)
+def navbar_is_open(opened, navbar):
+	navbar["collapsed"] = {"mobile": not opened}
+	return navbar
 
 # The app will be served by Gunicorn
-server = app.server  # Expose Flask server for Gunicorn
+server = app.server # Expose Flask server for Gunicorn
 
-if __name__ == '__main__':
-    app.run(debug=True, port=8070)
+if __name__ == "__main__":
+	app.run(debug=True, port=8070)
