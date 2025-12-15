@@ -1,8 +1,8 @@
 import dash
-from dash import html
+import dash_mantine_components as dmc
 
 dash.register_page(__name__, path='/', name='Home', order=0)
 
-layout = html.Div([
-    html.H1("Welcome to Home Page")
+layout = dmc.Container([
+    dmc.Title("Welcome to Home Page")
 ])

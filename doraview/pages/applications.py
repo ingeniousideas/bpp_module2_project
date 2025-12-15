@@ -1,5 +1,4 @@
 import dash
-from dash import html
 import dash_mantine_components as dmc
 import pandas as pd
 
