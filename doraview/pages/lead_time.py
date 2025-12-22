@@ -1,6 +1,8 @@
 import dash
 import dash_mantine_components as dmc
+from dash import Dash, html, dcc, callback, Output, Input
 import pandas as pd
+import plotly.express as px
 
 from components.table import reuse_table
 

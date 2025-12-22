@@ -1,6 +1,5 @@
 import dash
 import dash_mantine_components as dmc
-from dash import html
 
 def dmc_sidebar():
 	return	dmc.ScrollArea(
