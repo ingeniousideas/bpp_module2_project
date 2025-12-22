@@ -34,7 +34,7 @@ layout = dmc.Container([
 	dmc.Container(
 		[
 			# Smaller title for the figure, order=3 gives size of font.
-			dmc.Title("Deployment Frequency", order=3),
+			dmc.Title("Deployment Frequency", order=1),
 
 			# Dropdown to select the data.
 			dmc.Select(
