@@ -50,6 +50,8 @@ layout = dmc.Container([
 				value="app001",
 				data=df_deploy_graph_groupby.application_id.unique()
 			),
+
+			# Graph to show deployment data.
 			dcc.Graph(id='deployments-graph-content'),
 
 			# Data displayed in table.
