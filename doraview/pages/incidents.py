@@ -45,7 +45,14 @@ Output('incidents-graph-content', 'figure'),
 Input('incidents-dropdown-selection', 'value')
 )
 def update_graph(value):
+
+	# Specify filtered data frame
 	dff = df_graph[df_graph.country==value]
+
+	# Specify figure attributes and characteristics
 	fig = px.line(dff, x='year', y='pop')
+
+	# Apply Plotly colour pallet
 	fig.update_layout(template="plotly_dark")
+
 	return fig

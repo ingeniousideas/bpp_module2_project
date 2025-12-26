@@ -60,10 +60,10 @@ Input('deployments-dropdown-selection', 'value')
 def update_graph(value):
 
 	# Specify filtered data frame
-	df_for_graph = df_deploy_graph_groupby[df_deploy_graph_groupby.application_id==value]
+	df_deploy_graph = df_deploy_graph_groupby[df_deploy_graph_groupby.application_id==value]
 
 	deploy_fig = px.bar(
-		df_for_graph,
+		df_deploy_graph,
 		title="Total Monthly Deployments by Application",
 		x='month',
 		y='count',
