@@ -23,7 +23,13 @@ df_deploy_graph = df_deploy_raw[["application_id","application_name","environmen
 df_deploy_graph["month"] = df_deploy_graph["deployed_at"].dt.month
 
 # create grouped data frame
-df_deploy_graph_groupby = df_deploy_graph.groupby(["application_id","application_name","month","environment","status"])["month"].count().reset_index(name="count")
+df_deploy_graph_groupby = df_deploy_graph.groupby([
+	"application_id",
+	"application_name",
+	"month",
+	"environment",
+	"status"
+	])["month"].count().reset_index(name="count")
 
 layout = dmc.Container([
 
