@@ -36,7 +36,7 @@ layout = dmc.Container([
 				label="Select app",
 				placeholder="Select app",
 				id="lead-time-dropdown-selection",
-				value="app001",
+				value=df_lead_raw.application_id.unique()[0],
 				data=df_lead_raw.application_id.unique()
 			),
 
@@ -57,7 +57,6 @@ def update_graph(value):
 	
 	# Specify filtered data frame
 	df_lead_graph = df_lead_raw[df_lead_raw.application_id==value]
-
 	df_lead_graph.sort_values(by=["commit_time"], inplace=True)
 
 	# https://stackoverflow.com/questions/74520782/plotly-express-overlay-two-line-graphs
@@ -67,6 +66,7 @@ def update_graph(value):
 		x="commit_time",							# Column for use on x-axis
 		y="lead_time_hours",							# Column for use on y-axis
 		color="application_id",					# Column for use on color grouping
+		trendline="ols",						# Add a trendline
 		)
 
 
@@ -78,9 +78,21 @@ def update_graph(value):
 		color="application_id",					# Column for use on color grouping
 		)
 
+	# Combine the two figures
 	fig_lead_scat_trace.add_traces(
 		list(fig_lead_ema_trace.select_traces())
 	)
+
+	# Manually set colors from the plotly_dark palette
+	# Assuming trace order: [0] scatter points, [1] trendline, [2] EMA
+	fig_lead_scat_trace.data[0].marker.color = '#636efa'  # Scatter points
+	fig_lead_scat_trace.data[1].line.color = '#ef553b'    # Trendline
+	fig_lead_scat_trace.data[2].line.color = '#00cc96'    # EMA line
+
+	# Customize legend labels
+	fig_lead_scat_trace.data[0].name = 'Datapoints'
+	fig_lead_scat_trace.data[1].name = 'Trendline'
+	fig_lead_scat_trace.data[2].name = 'EMA'
 
 	# Apply Plotly colour pallet
 	fig_lead_scat_trace.update_layout(template="plotly_dark")

@@ -49,7 +49,7 @@ layout = dmc.Container([
 				label="Select app",
 				placeholder="Select app",
 				id="failure-dropdown-selection",
-				value="app001",
+				value=df_deploy_graph_groupby.application_id.unique()[0],
 				data=df_deploy_graph_groupby.application_id.unique()
 			),
 
