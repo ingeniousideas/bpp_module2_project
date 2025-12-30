@@ -10,8 +10,11 @@ dash.register_page(__name__, path='/lead_time', name='Lead Time for Changes', or
 
 raw_file_path = '/home/lnx_workspaces/bpp_projects/bpp_module2_project/doraview/data/json/change_lead_time.json'
 
-df_lead_raw = pd.read_json(raw_file_path, encoding='utf-8', convert_dates=["committed_at", "deployed_at"])
-
+df_lead_raw = pd.read_json(
+	raw_file_path,
+	encoding='utf-8',
+	convert_dates=["committed_at", "deployed_at"]
+	)
 
 """ Update dataframe for use by the graph callback
 
