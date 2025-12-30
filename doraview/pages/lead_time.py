@@ -83,6 +83,18 @@ def update_graph(value):
 		list(fig_lead_ema_trace.select_traces())
 	)
 
+	fig_lead_scat_trace.update_layout(
+		legend_title_text="Legend"
+	)
+
+	fig_lead_scat_trace.update_yaxes(
+		title_text="Lead Time (hours)"
+	)
+
+	fig_lead_scat_trace.update_xaxes(
+		title_text="Commit Date"
+	)
+
 	# Manually set colors from the plotly_dark palette
 	# Assuming trace order: [0] scatter points, [1] trendline, [2] EMA
 	fig_lead_scat_trace.data[0].marker.color = '#636efa'  # Scatter points
@@ -90,9 +102,9 @@ def update_graph(value):
 	fig_lead_scat_trace.data[2].line.color = '#00cc96'    # EMA line
 
 	# Customize legend labels
-	fig_lead_scat_trace.data[0].name = 'Datapoints'
-	fig_lead_scat_trace.data[1].name = 'Trendline'
-	fig_lead_scat_trace.data[2].name = 'EMA'
+	fig_lead_scat_trace.data[0].name = f'Lead times'
+	# fig_lead_scat_trace.data[1].name = 'Trendline' # This doesn't work. Likely because it's part of the scatter trace.
+	fig_lead_scat_trace.data[2].name = 'Lead Time EMA'
 
 	# Apply Plotly colour pallet
 	fig_lead_scat_trace.update_layout(template="plotly_dark")

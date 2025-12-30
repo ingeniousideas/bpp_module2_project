@@ -76,9 +76,16 @@ def update_graph(value):
 		x='month',
 		y='count',
 	
-		facet_col='application_id'
+		# facet_col='application_id'
 	)
 
+	deploy_fig.update_layout(
+		legend_title_text="Legend"
+	)
+
+	deploy_fig.update_yaxes(
+		title_text="Number of Deployments"
+	)
 	deploy_fig.update_xaxes(
 		title_text="Deployment Month",
 		tickvals=list(range(1,13)),

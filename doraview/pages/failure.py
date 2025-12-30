@@ -56,10 +56,6 @@ layout = dmc.Container([
 			dcc.Graph(id='failure-rate-monthly-graph',
 			),
 
-			# # Graph to show deployment failure data.
-			# dcc.Graph(id='failure-graph-content',
-			# ),
-
 		]
 	),
 	reuse_table(df_fail, "Table of Deployment Failures")
@@ -102,12 +98,16 @@ def update_failure_rate_graph(value):
 
 	fig_month_stat_bar.update_layout(barmode='stack')
 
+	fig_month_stat_bar.update_layout(
+		legend_title_text="Legend"
+	)
+
 	fig_month_stat_bar.update_yaxes(
-		title_text="Percentage (%)"
+		title_text="Percentage (%) Outcomes"
 	)
 
 	fig_month_stat_bar.update_xaxes(
-		title_text="Month",
+		title_text="Failure Month",
 		tickvals=list(range(1,13)),
 		ticktext=['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
 	)
@@ -116,44 +116,3 @@ def update_failure_rate_graph(value):
 	fig_month_stat_bar.update_layout(template="plotly_dark")
 
 	return fig_month_stat_bar
-
-
-
-# Callback function to return a figure as defined by the dropdown.
-@callback(
-Output('failure-graph-content', 'figure'),
-Input('failure-dropdown-selection', 'value')
-)
-def update_graph(value):
-
-	# Specify filtered data frame
-	df_deploy_graph = df_deploy_graph_groupby[df_deploy_graph_groupby.application_id==value]
-
-	deploy_fig = px.bar(
-		df_deploy_graph,
-		title="Monthly Deployments by Application",
-		x='month',
-		y='count',
-		color='status',
-		color_discrete_map={
-			"success":"#636EFA",
-			"failed":"#EF553B"
-			},
-		category_orders={
-			"status":[
-				"success",
-				"failed"
-				]},
-		facet_col='application_id'
-	)
-
-	deploy_fig.update_xaxes(
-		title_text="Deployment Month",
-		tickvals=list(range(1,13)),
-		ticktext=['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-	)
-
-	# Apply Plotly colour pallet
-	deploy_fig.update_layout(template="plotly_dark")
-
-	return deploy_fig

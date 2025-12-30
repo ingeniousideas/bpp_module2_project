@@ -66,13 +66,25 @@ def update_mttr_graph(value):
 		trendline="ols",						# Add a trendline
 		)
 
+	fig_mttr_scat_trace.update_yaxes(
+		title_text="Resolution Time (hours)"
+	)
+	
+	fig_mttr_scat_trace.update_xaxes(
+		title_text="Incident Date"
+	)
+	
+	fig_mttr_scat_trace.update_layout(
+		legend_title_text="Legend"
+	)
+
 	# Manually set colors from the plotly_dark palette
 	# Assuming trace order: [0] scatter points, [1] trendline, [2] EMA
 	fig_mttr_scat_trace.data[0].marker.color = '#636efa'  # Scatter points
 	fig_mttr_scat_trace.data[1].line.color = '#ef553b'    # Trendline
 
 	# Customize legend labels
-	fig_mttr_scat_trace.data[0].name = f'{value} failures'  # Scatter points
+	fig_mttr_scat_trace.data[0].name = f'Resolution Times'  # Scatter points
 
 	# Apply Plotly colour pallet
 	fig_mttr_scat_trace.update_layout(template="plotly_dark")
