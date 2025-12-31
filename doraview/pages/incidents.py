@@ -53,7 +53,7 @@ Input('incidents-dropdown-selection', 'value')
 def update_mttr_graph(value):
 
 	# Specify filtered data frame
-	df_apps = df_raw_incidents[df_raw_incidents.application_id==value]
+	df_apps = df_raw_incidents.loc[df_raw_incidents.application_id==value].copy()
 	df_apps.sort_values(by=["started_at"], inplace=True)
 
 	# https://stackoverflow.com/questions/74520782/plotly-express-overlay-two-line-graphs
