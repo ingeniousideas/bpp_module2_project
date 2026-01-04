@@ -122,4 +122,6 @@ def update_table(value):
 
 	df_single_app = df_lead_basic.loc[df_lead_basic.application_id==value].copy()
 
-	return reuse_table(df_single_app, "Table of Commits and Lead Times")
+	lead_table = reuse_table(df_single_app, "Table of Commits and Lead Times")
+
+	return lead_table

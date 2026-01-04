@@ -86,4 +86,6 @@ def update_table(value):
 
 	df_single_app = df_fail_basic.loc[df_fail_basic.application_id==value].copy()
 
-	return reuse_table(df_single_app, "Table of Deployment Failures")
+	fail_table = reuse_table(df_single_app, "Table of Deployment Failures")
+
+	return fail_table

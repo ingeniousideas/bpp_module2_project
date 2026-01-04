@@ -65,4 +65,6 @@ def update_table(value):
 
 	df_single_app = df_deploy_basic.loc[df_deploy_basic.application_id==value].copy()
 
-	return reuse_table(df_single_app, "Table of Application Feature Deployments")
+	deploy_table = reuse_table(df_single_app, "Table of Application Feature Deployments")
+
+	return deploy_table

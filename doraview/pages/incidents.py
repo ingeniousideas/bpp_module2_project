@@ -95,4 +95,6 @@ def update_table(value):
 
 	df_single_app = df_incidents_basic.loc[df_incidents_basic.application_id==value].copy()
 
+	incidents_table = reuse_table(df_single_app, "Table of Observed Incidents")
+
 	return reuse_table(df_single_app, "Table of Observed Incidents")
