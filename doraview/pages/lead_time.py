@@ -40,8 +40,10 @@ layout = dmc.Container([
 
 			# Graph to show lead time data.
 			dcc.Graph(id='lead-time-graph-content'),
-			
-			reuse_table(df_lead_basic, "Table of Commits and Lead Times")
+
+			# Filtered table callback output.
+			html.Div(id='lead-time-table-content'),
+
 		],
 	)
 ])
@@ -111,3 +113,13 @@ def update_graph(value):
 	fig_lead_scat_trace.update_layout(template="plotly_dark")
 
 	return fig_lead_scat_trace
+
+@callback(
+		Output('lead-time-table-content', 'children'),
+		Input('lead-time-dropdown-selection', 'value')
+)
+def update_table(value):
+
+	df_single_app = df_lead_basic.loc[df_lead_basic.application_id==value].copy()
+
+	return reuse_table(df_single_app, "Table of Commits and Lead Times")

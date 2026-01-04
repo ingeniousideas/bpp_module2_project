@@ -35,8 +35,8 @@ layout = dmc.Container([
 			# scatter chart with ema line
 			dcc.Graph(id='incidents-scatter-graph'),
 
-			# Data displayed in table.
-			reuse_table(df_incidents_basic, "Table of Observed Incidents"),
+			# Filtered table callback output.
+			html.Div(id='incidents-table-content'),
 		]
 	),
 ])
@@ -86,3 +86,13 @@ def update_mttr_graph(value):
 	fig_mttr_scat_trace.update_layout(template="plotly_dark")
 
 	return fig_mttr_scat_trace
+
+@callback(
+		Output('incidents-table-content', 'children'),
+		Input('incidents-dropdown-selection', 'value')
+)
+def update_table(value):
+
+	df_single_app = df_incidents_basic.loc[df_incidents_basic.application_id==value].copy()
+
+	return reuse_table(df_single_app, "Table of Observed Incidents")

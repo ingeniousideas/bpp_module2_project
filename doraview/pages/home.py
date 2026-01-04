@@ -47,8 +47,10 @@ layout = dmc.Container(
 							children=[
 								# Graph to show deployment data.
 								dcc.Graph(figure=figure_deploy),
-								# dmc.Button("A button", variant="default"),
-								dcc.Graph(figure=figure_fail),
+
+								# Holding point.
+								dmc.Button("Awaiting Content", variant="default"),
+
 							]
 						),
 
@@ -59,8 +61,11 @@ layout = dmc.Container(
 							grow=True,
 							# other props...
 							children=[
-								dmc.Button("A button", variant="default"),
-								dmc.Button("A button", variant="default"),
+									# Graph to show failure data.
+								dcc.Graph(figure=figure_fail),
+
+								# Holding point.
+								dmc.Button("Awaiting Content", variant="default"),
 							]
 						),
 

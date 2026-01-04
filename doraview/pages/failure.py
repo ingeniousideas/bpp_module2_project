@@ -58,9 +58,13 @@ layout = dmc.Container([
 			dcc.Graph(id='failure-rate-monthly-graph',
 			),
 
+			# Filtered table callback output.
+			html.Div(id='failure-table-content'),
+
 		]
 	),
-	reuse_table(df_fail_basic, "Table of Deployment Failures")
+
+
 ])
 
 # Callback to update monthly failure rate graph
@@ -73,3 +77,13 @@ def update_failure_rate_graph(value):
 	fail_fig = fig_bar_single(df_deploy_graph, value, view)
 
 	return fail_fig
+
+@callback(
+		Output('failure-table-content', 'children'),
+		Input('failure-dropdown-selection', 'value')
+)
+def update_table(value):
+
+	df_single_app = df_fail_basic.loc[df_fail_basic.application_id==value].copy()
+
+	return reuse_table(df_single_app, "Table of Deployment Failures")
