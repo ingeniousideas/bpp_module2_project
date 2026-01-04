@@ -5,25 +5,16 @@ import pandas as pd
 import plotly.express as px
 
 from components.table import reuse_table
+from components.get_figure import fig_bar_single
+from components.get_dataframes import figure_dataframe, raw_dataframe
 
 dash.register_page(__name__, path='/failures', name='Failure Rate', order=4)
 
-raw_file_path = '/home/lnx_workspaces/bpp_projects/bpp_module2_project/doraview/data/json/change_fail.json'
+view = "fail"
 
-df_fail_raw = pd.read_json(
-	raw_file_path,
-	encoding='utf-8',
-	convert_dates=["detected_at"]
-	)
-
-deploy_raw_file_path = '/home/lnx_workspaces/bpp_projects/bpp_module2_project/doraview/data/json/deployment_frequency.json'
-
-df_deploy_raw = pd.read_json(
-	deploy_raw_file_path,
-	encoding='utf-8',
-	convert_dates=["deployed_at"]
-	)
-
+# Get dataframes for figures and tables etc.
+df_fail_basic = raw_dataframe('fail')
+df_deploy_basic = raw_dataframe('deploy')
 
 """  Update dtaftame for use by the graph callback
 
@@ -31,7 +22,8 @@ df_deploy_raw = pd.read_json(
 	Add new grouping column "month.
 """
 # Reduce number of columns
-df_deploy_graph = df_deploy_raw[["application_id","application_name","environment","status","deployed_at"]].copy()
+df_deploy_graph = df_deploy_basic[["application_id","application_name","environment","status","deployed_at"]].copy()
+
 # Add Month column for grouping.
 df_deploy_graph["month"] = df_deploy_graph["deployed_at"].dt.month
 
@@ -68,61 +60,16 @@ layout = dmc.Container([
 
 		]
 	),
-	reuse_table(df_fail_raw, "Table of Deployment Failures")
+	reuse_table(df_fail_basic, "Table of Deployment Failures")
 ])
 
 # Callback to update monthly failure rate graph
 @callback(
-Output('failure-rate-monthly-graph', 'figure'),
-Input('failure-dropdown-selection', 'value')
-)
+		Output('failure-rate-monthly-graph', 'figure'),
+		Input('failure-dropdown-selection', 'value')
+	)
 def update_failure_rate_graph(value):
-	# Filter deploy df to app id
-	df_target = df_deploy_graph[df_deploy_raw['application_id']==value]
 
-	df_status_grouped = df_target.groupby(['month', 'status']).agg({'status':'count'})
+	fail_fig = fig_bar_single(df_deploy_graph, value, view)
 
-	df_status_percent = df_status_grouped.groupby(level=0).apply(
-		lambda x: 100 * x / x.sum())
-
-	# Fix the index (drop the duplicate month level)
-	df_status_percent.index = df_status_percent.index.droplevel(1)
-
-	# Rename the column to avoid conflict during reset_index
-	df_status_percent = df_status_percent.rename(columns={'status':'percentage'})
-
-	df_status_percent = df_status_percent.reset_index()
-
-	# display dataframe as figure
-	fig_month_stat_bar = px.bar(
-		data_frame=df_status_percent,
-		title="Deployment Failure Rates by Month",
-		x="month",
-		y="percentage",
-		color="status",
-		color_discrete_map={
-			"success":"#636EFA",
-			"failed":"#EF553B"
-			},
-	)
-
-	fig_month_stat_bar.update_layout(barmode='stack')
-
-	fig_month_stat_bar.update_layout(
-		legend_title_text="Legend"
-	)
-
-	fig_month_stat_bar.update_yaxes(
-		title_text="Percentage (%) Outcomes"
-	)
-
-	fig_month_stat_bar.update_xaxes(
-		title_text="Failure Month",
-		tickvals=list(range(1,13)),
-		ticktext=['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-	)
-
-	# Apply Plotly colour pallet
-	fig_month_stat_bar.update_layout(template="plotly_dark")
-
-	return fig_month_stat_bar
+	return fail_fig

@@ -5,16 +5,11 @@ import pandas as pd
 import plotly.express as px
 
 from components.table import reuse_table
+from components.get_dataframes import figure_dataframe, raw_dataframe
 
 dash.register_page(__name__, path='/lead_time', name='Lead Time for Changes', order=3)
 
-raw_file_path = '/home/lnx_workspaces/bpp_projects/bpp_module2_project/doraview/data/json/change_lead_time.json'
-
-df_lead_raw = pd.read_json(
-	raw_file_path,
-	encoding='utf-8',
-	convert_dates=["committed_at", "deployed_at"]
-	)
+df_lead_basic = raw_dataframe('lead')
 
 """ Update dataframe for use by the graph callback
 
@@ -22,7 +17,7 @@ df_lead_raw = pd.read_json(
 """
 # Add Exponential Moving Average (EMA) column
 # https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.ewm.html
-df_lead_raw["EMA"] = df_lead_raw["lead_time_hours"].ewm(span=5, adjust=False).mean()
+df_lead_basic["EMA"] = df_lead_basic["lead_time_hours"].ewm(span=5, adjust=False).mean()
 
 layout = dmc.Container([
 
@@ -39,32 +34,35 @@ layout = dmc.Container([
 				label="Select app",
 				placeholder="Select app",
 				id="lead-time-dropdown-selection",
-				value=df_lead_raw.application_id.unique()[0],
-				data=df_lead_raw.application_id.unique()
+				value=df_lead_basic.application_id.unique()[0],
+				data=df_lead_basic.application_id.unique()
 			),
 
 			# Graph to show lead time data.
 			dcc.Graph(id='lead-time-graph-content'),
 			
-			reuse_table(df_lead_raw, "Table of Commits and Lead Times")
+			reuse_table(df_lead_basic, "Table of Commits and Lead Times")
 		],
 	)
 ])
 
+
+
+
 # Callback function to return a figure as defined by the dropdown.
 @callback(
-Output('lead-time-graph-content', 'figure'),
-Input('lead-time-dropdown-selection', 'value')
-)
+		Output('lead-time-graph-content', 'figure'),
+		Input('lead-time-dropdown-selection', 'value')
+	)
 def update_graph(value):
 	
 	# Specify filtered data frame
-	df_lead_graph = df_lead_raw[df_lead_raw.application_id==value].copy()
-	df_lead_graph.sort_values(by=["commit_time"], inplace=True)
+	df_updated = df_lead_basic[df_lead_basic.application_id==value].copy()
+	df_updated.sort_values(by=["commit_time"], inplace=True)
 
 	# https://stackoverflow.com/questions/74520782/plotly-express-overlay-two-line-graphs
 	fig_lead_scat_trace = px.scatter(
-		data_frame=df_lead_graph,
+		data_frame=df_updated,
 		title="Lead Time for Changes Scatter Plot",	# Label for the figure.
 		x="commit_time",							# Column for use on x-axis
 		y="lead_time_hours",							# Column for use on y-axis
@@ -74,7 +72,7 @@ def update_graph(value):
 
 
 	fig_lead_ema_trace = px.line(
-		data_frame=df_lead_graph,
+		data_frame=df_updated,
 		title="Lead Time for Changes with EMA Line Plot",	# Label for the figure.
 		x="commit_time",							# Column for use on x-axis
 		y="EMA",							# Column for use on y-axis

@@ -13,6 +13,10 @@ import dash_mantine_components as dmc
 
 def reuse_table(table_dataframe, table_title):
 
+	# value = "app002"
+
+	# df_single_app = table_dataframe.loc[table_dataframe.application_id==value].copy()
+
 	return dmc.Container(
 
 		[

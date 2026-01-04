@@ -1,38 +1,20 @@
+# Framework components
 import dash
 import dash_mantine_components as dmc
 from dash import Dash, html, dcc, callback, Output, Input
-import pandas as pd
-import plotly.express as px
+
+# Custom components
 from components.table import reuse_table
+from components.get_figure import fig_bar_single
+from components.get_dataframes import figure_dataframe, raw_dataframe
 
 dash.register_page(__name__, path='/deployments', name='Deployment Frequency', order=2)
 
-raw_file_path = '/home/lnx_workspaces/bpp_projects/bpp_module2_project/doraview/data/json/deployment_frequency.json'
+view = "deploy"
 
-df_deploy_raw = pd.read_json(
-	raw_file_path,
-	encoding='utf-8',
-	convert_dates=["deployed_at"]
-	)
-
-"""  Update dtaftame for use by the graph callback
-
-	Reduce the number of columns for simplicity.
-	Add new grouping column "month.
-"""
-# Reduce number of columns
-df_deploy_graph = df_deploy_raw[["application_id","application_name","environment","status","deployed_at"]].copy()
-# Add Month column for grouping.
-df_deploy_graph["month"] = df_deploy_graph["deployed_at"].dt.month
-
-# create grouped data frame
-df_deploy_graph_groupby = df_deploy_graph.groupby([
-	"application_id",
-	# "application_name",
-	"month",
-	# "environment",
-	# "status"
-	])["month"].count().reset_index(name="count")
+# Load dataframes.
+df_deploy_basic = raw_dataframe("deploy")
+df_deploy_figure = figure_dataframe("deploy")
 
 layout = dmc.Container([
 
@@ -42,60 +24,45 @@ layout = dmc.Container([
 	# Data displayed as figure.
 	dmc.Container(
 		[
-			# Smaller title for the figure, order=3 gives size of font.
-			dmc.Title("Figure of Deployments Per Month", order=3),
-
 			# Dropdown to select the data.
 			dmc.Select(
 				label="Select app",
 				placeholder="Select app",
 				id="deployments-dropdown-selection",
-				value=df_deploy_graph_groupby.application_id.unique()[0],
-				data=df_deploy_graph_groupby.application_id.unique()
+				value=df_deploy_figure.application_id.unique()[0],
+				data=df_deploy_figure.application_id.unique()
 			),
+
+			# Smaller title for the figure, order=3 gives size of font.
+			dmc.Title("Figure of Deployments Per Month", order=3),
 
 			# Graph to show deployment data.
 			dcc.Graph(id='deployments-graph-content'),
 
-			# Data displayed in table.
-			reuse_table(df_deploy_raw, "Table of Application Feature Deployments")
+			# Filtered table callback output.
+			html.Div(id='deployments-table-content'),
+
 		],
 	),
 ])
 
 # Callback function to return a figure as defined by the dropdown.
 @callback(
-Output('deployments-graph-content', 'figure'),
-Input('deployments-dropdown-selection', 'value')
+		Output('deployments-graph-content', 'figure'),
+		Input('deployments-dropdown-selection', 'value')
 )
 def update_graph(value):
 
-	# Specify filtered data frame
-	df_deploy_graph = df_deploy_graph_groupby[df_deploy_graph_groupby.application_id==value]
-
-	deploy_fig = px.bar(
-		df_deploy_graph,
-		title="Total Monthly Deployments by Application",
-		x='month',
-		y='count',
-	
-		# facet_col='application_id'
-	)
-
-	deploy_fig.update_layout(
-		legend_title_text="Legend"
-	)
-
-	deploy_fig.update_yaxes(
-		title_text="Number of Deployments"
-	)
-	deploy_fig.update_xaxes(
-		title_text="Deployment Month",
-		tickvals=list(range(1,13)),
-		ticktext=['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-	)
-
-	# Apply Plotly colour pallet
-	deploy_fig.update_layout(template="plotly_dark")
+	deploy_fig = fig_bar_single(df_deploy_figure, value, view)
 
 	return deploy_fig
+
+@callback(
+		Output('deployments-table-content', 'children'),
+		Input('deployments-dropdown-selection', 'value')
+)
+def update_table(value):
+
+	df_single_app = df_deploy_basic.loc[df_deploy_basic.application_id==value].copy()
+
+	return reuse_table(df_single_app, "Table of Application Feature Deployments")
