@@ -8,11 +8,21 @@ from components.table import reuse_table
 
 dash.register_page(__name__, path='/failures', name='Failure Rate', order=4)
 
-fail_raw_file_path = '/home/lnx_workspaces/bpp_projects/bpp_module2_project/doraview/data/json/change_fail.json'
-df_fail = pd.read_json(fail_raw_file_path, encoding='utf-8', convert_dates=["detected_at"])
+raw_file_path = '/home/lnx_workspaces/bpp_projects/bpp_module2_project/doraview/data/json/change_fail.json'
+
+df_fail_raw = pd.read_json(
+	raw_file_path,
+	encoding='utf-8',
+	convert_dates=["detected_at"]
+	)
 
 deploy_raw_file_path = '/home/lnx_workspaces/bpp_projects/bpp_module2_project/doraview/data/json/deployment_frequency.json'
-df_deploy_raw = pd.read_json(deploy_raw_file_path, encoding='utf-8', convert_dates=["deployed_at"])
+
+df_deploy_raw = pd.read_json(
+	deploy_raw_file_path,
+	encoding='utf-8',
+	convert_dates=["deployed_at"]
+	)
 
 
 """  Update dtaftame for use by the graph callback
@@ -58,7 +68,7 @@ layout = dmc.Container([
 
 		]
 	),
-	reuse_table(df_fail, "Table of Deployment Failures")
+	reuse_table(df_fail_raw, "Table of Deployment Failures")
 ])
 
 # Callback to update monthly failure rate graph

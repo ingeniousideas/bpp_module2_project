@@ -26,10 +26,13 @@ df_lead_raw["EMA"] = df_lead_raw["lead_time_hours"].ewm(span=5, adjust=False).me
 
 layout = dmc.Container([
 
+	# Page title.
+	dmc.Title("Lead Time for Changes"),
+
 	dmc.Container(
 		[
 			# Title for the page.
-			dmc.Title("Lead Time for Changes", order=1),
+			dmc.Title("Figure of Change Lead Times", order=3),
 
 			# Dropdown to select the data.
 			dmc.Select(
@@ -56,7 +59,7 @@ Input('lead-time-dropdown-selection', 'value')
 def update_graph(value):
 	
 	# Specify filtered data frame
-	df_lead_graph = df_lead_raw[df_lead_raw.application_id==value]
+	df_lead_graph = df_lead_raw[df_lead_raw.application_id==value].copy()
 	df_lead_graph.sort_values(by=["commit_time"], inplace=True)
 
 	# https://stackoverflow.com/questions/74520782/plotly-express-overlay-two-line-graphs

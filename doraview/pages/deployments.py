@@ -3,14 +3,17 @@ import dash_mantine_components as dmc
 from dash import Dash, html, dcc, callback, Output, Input
 import pandas as pd
 import plotly.express as px
-
 from components.table import reuse_table
 
 dash.register_page(__name__, path='/deployments', name='Deployment Frequency', order=2)
 
 raw_file_path = '/home/lnx_workspaces/bpp_projects/bpp_module2_project/doraview/data/json/deployment_frequency.json'
 
-df_deploy_raw = pd.read_json(raw_file_path, encoding='utf-8', convert_dates=["deployed_at"])
+df_deploy_raw = pd.read_json(
+	raw_file_path,
+	encoding='utf-8',
+	convert_dates=["deployed_at"]
+	)
 
 """  Update dtaftame for use by the graph callback
 
@@ -40,7 +43,7 @@ layout = dmc.Container([
 	dmc.Container(
 		[
 			# Smaller title for the figure, order=3 gives size of font.
-			dmc.Title("Deployment Frequency", order=1),
+			dmc.Title("Figure of Deployments Per Month", order=3),
 
 			# Dropdown to select the data.
 			dmc.Select(

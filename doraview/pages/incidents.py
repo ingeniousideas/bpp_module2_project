@@ -9,7 +9,8 @@ from components.table import reuse_table
 dash.register_page(__name__, path='/restoration', name='Time to Restore', order=5)
 
 raw_file_path = '/home/lnx_workspaces/bpp_projects/bpp_module2_project/doraview/data/json/incidents.json'
-df_raw_incidents  = pd.read_json(
+
+df_incidents_raw  = pd.read_json(
 	raw_file_path,
 	encoding='utf-8',
 	convert_dates=["incident_start_time", "incident_end_time"]
@@ -23,22 +24,22 @@ layout = dmc.Container([
 	dmc.Container(
 		[
 			# Smaller title for the figure, order=3 gives size of font.
-			dmc.Title("Table of Observed Incidents", order=3),
+			dmc.Title("Monthly  Observed Incidents", order=3),
 
 			# Dropdown to select the data.
 			dmc.Select(
 				label="Select app",
 				placeholder="Select app",
 				id="incidents-dropdown-selection",
-				value=df_raw_incidents.application_id.unique()[0],
-				data=df_raw_incidents.application_id.unique()
+				value=df_incidents_raw.application_id.unique()[0],
+				data=df_incidents_raw.application_id.unique()
 			),
 
 			# scatter chart with ema line
 			dcc.Graph(id='incidents-scatter-graph'),
 
 			# Data displayed in table.
-			reuse_table(df_raw_incidents, "Table of Observed Incidents"),
+			reuse_table(df_incidents_raw, "Table of Observed Incidents"),
 
 		]
 	),
@@ -53,7 +54,7 @@ Input('incidents-dropdown-selection', 'value')
 def update_mttr_graph(value):
 
 	# Specify filtered data frame
-	df_apps = df_raw_incidents.loc[df_raw_incidents.application_id==value].copy()
+	df_apps = df_incidents_raw.loc[df_incidents_raw.application_id==value].copy()
 	df_apps.sort_values(by=["started_at"], inplace=True)
 
 	# https://stackoverflow.com/questions/74520782/plotly-express-overlay-two-line-graphs
