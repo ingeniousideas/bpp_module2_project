@@ -221,7 +221,7 @@ def get_scatter_single(dataframe, app_id, view):
 		# fig_lead_scat_trace.data[1].name = 'Trendline' # This doesn't work. Likely because it's part of the scatter trace.
 		fig_scat_single.data[2].name = 'Lead Time EMA'
 
-		fig_scat_single.data[2].line.color = '#00cc96'    # EMA line
+		fig_scat_single.data[2].line.color = '#00cc96'    # EMA line (green)
 
 	elif view == "incident":
 
@@ -230,8 +230,8 @@ def get_scatter_single(dataframe, app_id, view):
 
 	# Manually set colors from the plotly_dark palette
 	# Assuming trace order: [0] scatter points, [1] trendline, [2] EMA
-	fig_scat_single.data[0].marker.color = '#636efa'  # Scatter points
-	fig_scat_single.data[1].line.color = '#ef553b'    # Trendline
+	fig_scat_single.data[0].marker.color = '#636efa'  # Scatter points (purple)
+	fig_scat_single.data[1].line.color = '#ef553b'    # Trendline (red)
 	
 	# Apply Plotly colour pallet
 	fig_scat_single.update_layout(template="plotly_dark")
@@ -280,22 +280,23 @@ def get_scatter_multi(dataframe, view):
 		trendline="ols",					# Add a trendline
 		)
 
-	fig_scat_multi.update_layout(
-		legend_title_text="Legend"
-	)
+	fig_scat_multi.update_layout(legend_title_text="Legend")
+	fig_scat_multi.update_yaxes(title_text=y_title)
+	fig_scat_multi.update_xaxes(title_text=x_title)
 
-	fig_scat_multi.update_yaxes(
-		title_text=y_title
-	)
+	# if view == "lead":
 
-	fig_scat_multi.update_xaxes(
-		title_text=x_title
-	)
+	# 	# Manually set colors from the plotly_dark palette
+	# 	# Assuming trace order: [0] scatter points, [1] trendline, [2] EMA
+	# 	fig_scat_multi.data[0].marker.color = '#636efa'  # Scatter points (purple)
+	# 	fig_scat_multi.data[1].line.color = '#636efa'    # Trendline (purple)
 
-	# Manually set colors from the plotly_dark palette
-	# Assuming trace order: [0] scatter points, [1] trendline, [2] EMA
-	fig_scat_multi.data[0].marker.color = '#636efa'  # Scatter points
-	fig_scat_multi.data[1].line.color = '#ef553b'    # Trendline
+	# elif view == "incident":
+
+	# 	# Manually set colors from the plotly_dark palette
+	# 	# Assuming trace order: [0] scatter points, [1] trendline, [2] EMA
+	# 	fig_scat_multi.data[0].marker.color = '#636efa'  # Scatter points (purple)
+	# 	fig_scat_multi.data[1].line.color = '#636efa'    # Trendline (red)
 	
 	# Apply Plotly colour pallet
 	fig_scat_multi.update_layout(template="plotly_dark")
