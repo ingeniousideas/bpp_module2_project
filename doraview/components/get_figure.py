@@ -143,3 +143,25 @@ def fig_bar_single(dataframe, app_id, view):
 	fig_bar_single.update_layout(template="plotly_dark")
 
 	return fig_bar_single
+
+def get_scatter_single():
+	""" Return scatter figure for a single application id.
+
+		Needed for:
+			- Lead Time.
+			- Time to Restore.
+
+		This will require a parameter of the app_id.
+
+		Optional Trendline and Moving Average plot.
+	"""
+	pass
+
+def get_scatter_multi():
+	""" Return scatter figure for all appliations.
+
+		This will require a parameter of the app_id.
+
+		Optional Trendline and Moving Average plot
+	"""
+	pass
