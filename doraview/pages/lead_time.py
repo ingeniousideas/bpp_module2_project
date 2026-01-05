@@ -6,8 +6,11 @@ import plotly.express as px
 
 from components.table import reuse_table
 from components.get_dataframes import figure_dataframe, raw_dataframe
+from components.get_figure import get_scatter_single
 
 dash.register_page(__name__, path='/lead_time', name='Lead Time for Changes', order=3)
+
+view = "lead"
 
 df_lead_basic = raw_dataframe('lead')
 
@@ -38,8 +41,8 @@ layout = dmc.Container([
 				data=df_lead_basic.application_id.unique()
 			),
 
-			# Graph to show lead time data.
-			dcc.Graph(id='lead-time-graph-content'),
+			# Graph to show deployment data.
+			dcc.Graph(id='lead-scatter-graph-content'),
 
 			# Filtered table callback output.
 			html.Div(id='lead-time-table-content'),
@@ -49,70 +52,16 @@ layout = dmc.Container([
 ])
 
 
-
-
 # Callback function to return a figure as defined by the dropdown.
 @callback(
-		Output('lead-time-graph-content', 'figure'),
+		Output('lead-scatter-graph-content', 'figure'),
 		Input('lead-time-dropdown-selection', 'value')
-	)
-def update_graph(value):
-	
-	# Specify filtered data frame
-	df_updated = df_lead_basic[df_lead_basic.application_id==value].copy()
-	df_updated.sort_values(by=["commit_time"], inplace=True)
+)
+def update_scatter_graph(value):
 
-	# https://stackoverflow.com/questions/74520782/plotly-express-overlay-two-line-graphs
-	fig_lead_scat_trace = px.scatter(
-		data_frame=df_updated,
-		title="Lead Time for Changes Scatter Plot",	# Label for the figure.
-		x="commit_time",							# Column for use on x-axis
-		y="lead_time_hours",							# Column for use on y-axis
-		color="application_id",					# Column for use on color grouping
-		trendline="ols",						# Add a trendline
-		)
+	fig_scat_single = get_scatter_single(df_lead_basic, value, view)
 
-
-	fig_lead_ema_trace = px.line(
-		data_frame=df_updated,
-		title="Lead Time for Changes with EMA Line Plot",	# Label for the figure.
-		x="commit_time",							# Column for use on x-axis
-		y="EMA",							# Column for use on y-axis
-		color="application_id",					# Column for use on color grouping
-		)
-
-	# Combine the two figures
-	fig_lead_scat_trace.add_traces(
-		list(fig_lead_ema_trace.select_traces())
-	)
-
-	fig_lead_scat_trace.update_layout(
-		legend_title_text="Legend"
-	)
-
-	fig_lead_scat_trace.update_yaxes(
-		title_text="Lead Time (hours)"
-	)
-
-	fig_lead_scat_trace.update_xaxes(
-		title_text="Commit Date"
-	)
-
-	# Manually set colors from the plotly_dark palette
-	# Assuming trace order: [0] scatter points, [1] trendline, [2] EMA
-	fig_lead_scat_trace.data[0].marker.color = '#636efa'  # Scatter points
-	fig_lead_scat_trace.data[1].line.color = '#ef553b'    # Trendline
-	fig_lead_scat_trace.data[2].line.color = '#00cc96'    # EMA line
-
-	# Customize legend labels
-	fig_lead_scat_trace.data[0].name = f'Lead times'
-	# fig_lead_scat_trace.data[1].name = 'Trendline' # This doesn't work. Likely because it's part of the scatter trace.
-	fig_lead_scat_trace.data[2].name = 'Lead Time EMA'
-
-	# Apply Plotly colour pallet
-	fig_lead_scat_trace.update_layout(template="plotly_dark")
-
-	return fig_lead_scat_trace
+	return fig_scat_single
 
 @callback(
 		Output('lead-time-table-content', 'children'),
