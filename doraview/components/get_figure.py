@@ -173,7 +173,16 @@ def get_scatter_single(dataframe, app_id, view):
 		scatter_color = "application_id"	
 
 	elif view == "incident":
-		pass
+
+		df_updated.sort_values(by=["started_at"], inplace=True)
+
+		# Set figure parameters
+		title = "Time to Recover from Incidents"
+		x_values = 'started_at'
+		y_values = 'duration_hours'
+		x_title = "Incident Date"
+		y_title = "Resolution Time (hours)"
+		scatter_color = "application_id"
 
 	# https://stackoverflow.com/questions/74520782/plotly-express-overlay-two-line-graphs
 	fig_scat_single = px.scatter(
@@ -214,21 +223,22 @@ def get_scatter_single(dataframe, app_id, view):
 			list(fig_lead_ema_trace.select_traces())
 		)
 
+		# Customize legend labels
+		fig_scat_single.data[0].name = f'Lead times'
+		# fig_lead_scat_trace.data[1].name = 'Trendline' # This doesn't work. Likely because it's part of the scatter trace.
+		fig_scat_single.data[2].name = 'Lead Time EMA'
+
 		fig_scat_single.data[2].line.color = '#00cc96'    # EMA line
 
 	elif view == "incident":
 
-		pass
+		# Customize legend labels
+		fig_scat_single.data[0].name = f'Resolution Times'  # Scatter points
 
 	# Manually set colors from the plotly_dark palette
 	# Assuming trace order: [0] scatter points, [1] trendline, [2] EMA
 	fig_scat_single.data[0].marker.color = '#636efa'  # Scatter points
 	fig_scat_single.data[1].line.color = '#ef553b'    # Trendline
-
-	# Customize legend labels
-	fig_scat_single.data[0].name = f'Lead times'
-	# fig_lead_scat_trace.data[1].name = 'Trendline' # This doesn't work. Likely because it's part of the scatter trace.
-	fig_scat_single.data[2].name = 'Lead Time EMA'
 	
 	# Apply Plotly colour pallet
 	fig_scat_single.update_layout(template="plotly_dark")

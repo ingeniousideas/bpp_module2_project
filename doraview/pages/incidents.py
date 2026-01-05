@@ -8,8 +8,11 @@ import plotly.express as px
 # Custom components
 from components.table import reuse_table
 from components.get_dataframes import figure_dataframe, raw_dataframe
+from components.get_figure import get_scatter_single
 
 dash.register_page(__name__, path='/restoration', name='Time to Restore', order=5)
+
+view = "incident"
 
 df_incidents_basic = raw_dataframe('incidents')
 
@@ -32,8 +35,8 @@ layout = dmc.Container([
 				data=df_incidents_basic.application_id.unique()
 			),
 
-			# scatter chart with ema line
-			dcc.Graph(id='incidents-scatter-graph'),
+			# Graph to show deployment data.
+			dcc.Graph(id='incident-scatter-graph-content'),
 
 			# Filtered table callback output.
 			html.Div(id='incidents-table-content'),
@@ -41,51 +44,17 @@ layout = dmc.Container([
 	),
 ])
 
+
 # Callback function to return a figure as defined by the dropdown.
 @callback(
-		Output('incidents-scatter-graph', 'figure'),
+		Output('incident-scatter-graph-content', 'figure'),
 		Input('incidents-dropdown-selection', 'value')
-	)
-def update_mttr_graph(value):
+)
+def update_scatter_graph(value):
 
-	# Specify filtered data frame
-	df_apps = df_incidents_basic.loc[df_incidents_basic.application_id==value].copy()
-	df_apps.sort_values(by=["started_at"], inplace=True)
+	fig_scat_single = get_scatter_single(df_incidents_basic, value, view)
 
-	# https://stackoverflow.com/questions/74520782/plotly-express-overlay-two-line-graphs
-	fig_mttr_scat_trace = px.scatter(
-		data_frame=df_apps,
-		title="Lead Time for Changes Scatter Plot",	# Label for the figure.
-		x="started_at",							# Column for use on x-axis
-		y="duration_hours",							# Column for use on y-axis
-		color="application_id",					# Column for use on color grouping
-		trendline="ols",						# Add a trendline
-		)
-
-	fig_mttr_scat_trace.update_yaxes(
-		title_text="Resolution Time (hours)"
-	)
-	
-	fig_mttr_scat_trace.update_xaxes(
-		title_text="Incident Date"
-	)
-	
-	fig_mttr_scat_trace.update_layout(
-		legend_title_text="Legend"
-	)
-
-	# Manually set colors from the plotly_dark palette
-	# Assuming trace order: [0] scatter points, [1] trendline, [2] EMA
-	fig_mttr_scat_trace.data[0].marker.color = '#636efa'  # Scatter points
-	fig_mttr_scat_trace.data[1].line.color = '#ef553b'    # Trendline
-
-	# Customize legend labels
-	fig_mttr_scat_trace.data[0].name = f'Resolution Times'  # Scatter points
-
-	# Apply Plotly colour pallet
-	fig_mttr_scat_trace.update_layout(template="plotly_dark")
-
-	return fig_mttr_scat_trace
+	return fig_scat_single
 
 @callback(
 		Output('incidents-table-content', 'children'),
