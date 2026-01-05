@@ -4,7 +4,7 @@ import dash_mantine_components as dmc
 from dash import Dash, html, dcc, callback, Output, Input
 
 # Custom components
-from components.table import reuse_table
+from components.dag_table import reuse_table
 from components.get_figure import fig_bar_single
 from components.get_dataframes import figure_dataframe, raw_dataframe
 

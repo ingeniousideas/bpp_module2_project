@@ -5,7 +5,7 @@ from dash import Dash, html, dcc, callback, Output, Input
 import plotly.express as px
 import pandas as pd
 
-from components.table import reuse_table
+from components.dag_table import reuse_table
 from components.get_figure import fig_bar_multi, get_scatter_multi
 from components.get_dataframes import figure_dataframe, raw_dataframe
 

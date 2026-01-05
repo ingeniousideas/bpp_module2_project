@@ -2,7 +2,7 @@ import dash
 import dash_mantine_components as dmc
 import pandas as pd
 
-from components.table import reuse_table
+from components.dag_table import reuse_table
 
 dash.register_page(__name__, path='/apps', name='Applications', order=1)
 

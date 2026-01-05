@@ -6,7 +6,7 @@ from dash import Dash, html, dcc, callback, Output, Input
 import plotly.express as px
 
 # Custom components
-from components.table import reuse_table
+from components.dag_table import reuse_table
 from components.get_dataframes import figure_dataframe, raw_dataframe
 from components.get_figure import get_scatter_single
 
