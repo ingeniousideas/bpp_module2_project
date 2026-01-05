@@ -6,7 +6,6 @@ Using reference from here: https://www.dash-mantine-components.com/components/ap
 import dash
 import dash_mantine_components as dmc
 from dash import Dash, Input, Output, State, callback, dcc
-# from dash_iconify import DashIconify
 
 from components.dmc_sidebar import dmc_sidebar
 
