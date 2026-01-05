@@ -57,6 +57,7 @@ def update_graph(value):
 
 	return deploy_fig
 
+# Callback functino to return table of rows for the specific app as selected.
 @callback(
 		Output('deployments-table-content', 'children'),
 		Input('deployments-dropdown-selection', 'value')
