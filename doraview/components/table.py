@@ -1,7 +1,3 @@
-from dash import Dash, html
-
-import dash
-from dash import Dash, Input, Output, callback, clientside_callback, ClientsideFunction
 import dash_ag_grid as dag
 import dash_mantine_components as dmc
 
@@ -13,29 +9,21 @@ import dash_mantine_components as dmc
 
 def reuse_table(table_dataframe, table_title):
 
-	# value = "app002"
-
-	# df_single_app = table_dataframe.loc[table_dataframe.application_id==value].copy()
-
 	return dmc.Container(
-
 		[
-		
 			dmc.Title(table_title, order=3), # order is size of text
 			# simple grid for the application components
 			dmc.Container(
 				[
-
-				# simple table for the application data
-				dag.AgGrid(
-					rowData=table_dataframe.to_dict("records"),
-					columnDefs=[{"field": i} for i in table_dataframe.columns],
-					className="ag-theme-alpine-dark"
-				),
-				# defines the grid size for the figure objects
+					# simple table for the application data
+					dag.AgGrid(
+						rowData=table_dataframe.to_dict("records"),
+						columnDefs=[{"field": i} for i in table_dataframe.columns],
+						className="ag-theme-alpine-dark"
+					),
 				],
 			), # type: ignore
 
 		],
-		fluid=True,
+		fluid=True
 	)
