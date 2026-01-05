@@ -59,9 +59,9 @@ layout = dmc.AppShell(
 
 	# Layout formatting.
 	header={"height": 60},
-	padding="md",
+	padding="base",
 	navbar={
-		"width": 300,
+		"width": 220,
 		"breakpoint": "sm",
 		"collapsed": {"mobile": True},
 	},
