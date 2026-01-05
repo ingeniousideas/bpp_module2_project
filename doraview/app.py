@@ -46,7 +46,6 @@ layout = dmc.AppShell(
 				dmc_sidebar(),
 			],
 			p="md",
-
 		),
 
 		# Main section, where the individual pages and anything else will be rendered.
@@ -59,7 +58,7 @@ layout = dmc.AppShell(
 
 	# Layout formatting.
 	header={"height": 60},
-	padding="base",
+	padding="sm",
 	navbar={
 		"width": 220,
 		"breakpoint": "sm",

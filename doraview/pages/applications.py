@@ -11,8 +11,11 @@ df_apps = pd.read_json('/home/lnx_workspaces/bpp_projects/bpp_module2_project/do
 layout = dmc.Container(
 	[
 		dmc.Title("Applications"),
-		reuse_table(df_apps, "Table of Applications")
+		
+		dmc.Container(
+			[
+				reuse_table(df_apps, "Table of Applications"),
+			],
+		),
 	],
-	fluid=True,
-	p="md"
 )
