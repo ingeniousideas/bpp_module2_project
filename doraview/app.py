@@ -24,14 +24,6 @@ layout = dmc.AppShell(
 				[
 					dmc.Burger(id="burger", size="sm", hiddenFrom="sm", opened=False),
 					dmc.Title("Lab DORA Metrics"),
-					# dmc.ActionIcon(
-					# 	DashIconify(icon="clarity:settings-line", width=20),
-					# 	size="lg",
-					# 	variant="subtle",
-					# 	id="action-icon",
-					# 	n_clicks=0,
-					# 	mb=10,
-					# ),
 				],
 				h="100%",
 				px="md",
