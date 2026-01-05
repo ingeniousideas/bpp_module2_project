@@ -6,8 +6,8 @@ import plotly.express as px
 import pandas as pd
 
 from components.table import reuse_table
-from components.get_figure import fig_bar_multi
-from components.get_dataframes import figure_dataframe
+from components.get_figure import fig_bar_multi, get_scatter_multi
+from components.get_dataframes import figure_dataframe, raw_dataframe
 
 df_apps = pd.read_json('/home/lnx_workspaces/bpp_projects/bpp_module2_project/doraview/data/json/applications.json')
 
@@ -20,8 +20,12 @@ df_fail_figure = figure_dataframe("fail_graph")
 figure_fail = fig_bar_multi(df_fail_figure, view="fail_graph")
 
 # References for the deploy incidents figure.
+df_incidents_basic = raw_dataframe('incidents')
+figure_incidents = get_scatter_multi(df_incidents_basic, view="incident")
 
 # References for the deploy lead time figure.
+df_lead_basic = raw_dataframe('lead')
+figure_lead = get_scatter_multi(df_lead_basic, view="lead")
 
 dash.register_page(__name__, path='/', name='Home', order=0)
 
@@ -49,7 +53,9 @@ layout = dmc.Container(
 								dcc.Graph(figure=figure_deploy),
 
 								# Holding point.
-								dmc.Button("Awaiting Content", variant="default"),
+								# dmc.Button("Awaiting Content", variant="default"),
+								# Graph to show lead time data.
+								dcc.Graph(figure = figure_lead),
 
 							]
 						),
@@ -65,7 +71,9 @@ layout = dmc.Container(
 								dcc.Graph(figure=figure_fail),
 
 								# Holding point.
-								dmc.Button("Awaiting Content", variant="default"),
+								# dmc.Button("Awaiting Content", variant="default"),
+								# Graph to show lead time data.
+								dcc.Graph(figure = figure_incidents),
 							]
 						),
 

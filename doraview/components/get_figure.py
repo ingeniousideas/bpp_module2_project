@@ -6,21 +6,19 @@ def fig_bar_multi(dataframe, view):
 
 		df_fig_bar = dataframe
 
+		# Set figure parameters
 		title = "Total Monthly Deployments by Application"
-
 		x_values = 'month'
 		y_values = 'count'
-
 		x_title = "Deployment Month"
 		y_title = "Number of Deployments"
-
 		bar_color = 'application_id'
 		color_map = None
 
 	elif view == "fail_graph":
 
+		# Calculate percentage of status by month
 		df_status_grouped = dataframe.groupby(['month', 'status']).agg({'status':'count'})
-
 		df_status_percent = df_status_grouped.groupby(level=0).apply(
 			lambda x: 100 * x / x.sum())
 
@@ -29,19 +27,14 @@ def fig_bar_multi(dataframe, view):
 
 		# Rename the column to avoid conflict during reset_index
 		df_status_percent = df_status_percent.rename(columns={'status':'percentage'})
-
 		df_fig_bar = df_status_percent.reset_index()
 
 		title = "Deployment Failure Rates by Month"
-
 		x_values = 'month'
 		y_values = 'percentage'
-
 		x_title = "Failure Month"
 		y_title = "Percentage (%) Outcomes"
-
 		bar_color = "status"
-
 		color_map = {
 			"success":"#636EFA",
 			"failed":"#EF553B"
@@ -245,7 +238,7 @@ def get_scatter_single(dataframe, app_id, view):
 
 	return fig_scat_single
 
-def get_scatter_multi():
+def get_scatter_multi(dataframe, view):
 	""" Return scatter figure for all appliations.
 
 		This will require a parameter of the app_id.
@@ -253,6 +246,58 @@ def get_scatter_multi():
 		Optional Trendline and Moving Average plot
 	"""
 	if view == "lead":
-		pass
+
+		dataframe.sort_values(by=["commit_time"], inplace=True)
+
+		# Set figure parameters
+		title = "Lead Time for Changes Scatter Plot"
+		x_values = 'commit_time'
+		y_values = 'lead_time_hours'
+		x_title = "Commit Date"
+		y_title = "Lead Time (hours)"
+		scatter_color = "application_id"
+
 	elif view == "incident":
-		pass
+
+		dataframe.sort_values(by=["started_at"], inplace=True)
+
+		# Set figure parameters
+		title = "Time to Recover from Incidents"
+		x_values = 'started_at'
+		y_values = 'duration_hours'
+		x_title = "Incident Date"
+		y_title = "Resolution Time (hours)"
+		scatter_color = "application_id"
+
+
+	# https://stackoverflow.com/questions/74520782/plotly-express-overlay-two-line-graphs
+	fig_scat_multi = px.scatter(
+		data_frame=dataframe,
+		title=title,	# Label for the figure.
+		x=x_values,							# Column for use on x-axis
+		y=y_values,							# Column for use on y-axis
+		color=scatter_color,					# Column for use on colour grouping
+		trendline="ols",					# Add a trendline
+		)
+
+	fig_scat_multi.update_layout(
+		legend_title_text="Legend"
+	)
+
+	fig_scat_multi.update_yaxes(
+		title_text=y_title
+	)
+
+	fig_scat_multi.update_xaxes(
+		title_text=x_title
+	)
+
+	# Manually set colors from the plotly_dark palette
+	# Assuming trace order: [0] scatter points, [1] trendline, [2] EMA
+	fig_scat_multi.data[0].marker.color = '#636efa'  # Scatter points
+	fig_scat_multi.data[1].line.color = '#ef553b'    # Trendline
+	
+	# Apply Plotly colour pallet
+	fig_scat_multi.update_layout(template="plotly_dark")
+
+	return fig_scat_multi
