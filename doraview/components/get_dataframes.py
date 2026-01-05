@@ -68,10 +68,7 @@ def figure_dataframe(view) -> pd.DataFrame:
 		# create grouped data frame
 		df_figure = df_updated.groupby([
 			"application_id",
-			# "application_name",
 			"month",
-			# "environment",
-			# "status"
 			])["month"].count().reset_index(name="count")
 
 		return df_figure

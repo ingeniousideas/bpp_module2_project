@@ -283,20 +283,6 @@ def get_scatter_multi(dataframe, view):
 	fig_scat_multi.update_layout(legend_title_text="Legend")
 	fig_scat_multi.update_yaxes(title_text=y_title)
 	fig_scat_multi.update_xaxes(title_text=x_title)
-
-	# if view == "lead":
-
-	# 	# Manually set colors from the plotly_dark palette
-	# 	# Assuming trace order: [0] scatter points, [1] trendline, [2] EMA
-	# 	fig_scat_multi.data[0].marker.color = '#636efa'  # Scatter points (purple)
-	# 	fig_scat_multi.data[1].line.color = '#636efa'    # Trendline (purple)
-
-	# elif view == "incident":
-
-	# 	# Manually set colors from the plotly_dark palette
-	# 	# Assuming trace order: [0] scatter points, [1] trendline, [2] EMA
-	# 	fig_scat_multi.data[0].marker.color = '#636efa'  # Scatter points (purple)
-	# 	fig_scat_multi.data[1].line.color = '#636efa'    # Trendline (red)
 	
 	# Apply Plotly colour pallet
 	fig_scat_multi.update_layout(template="plotly_dark")

@@ -12,9 +12,6 @@ from components.dmc_sidebar import dmc_sidebar
 
 app = Dash(__name__, use_pages=True, suppress_callback_exceptions=True)
 
-logo = "/home/lnx_workspaces/bpp_projects/bpp_module2_project/doraview/assests/hero-fourkeys.png"
-
-
 layout = dmc.AppShell(
 	[
 		# Top header section of page layout.

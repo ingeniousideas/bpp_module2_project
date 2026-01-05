@@ -52,7 +52,6 @@ layout = dmc.Container(
 								# Graph to show deployment data.
 								dcc.Graph(figure=figure_deploy),
 
-								# Holding point.
 								# dmc.Button("Awaiting Content", variant="default"),
 								# Graph to show lead time data.
 								dcc.Graph(figure = figure_lead),
@@ -70,7 +69,6 @@ layout = dmc.Container(
 									# Graph to show failure data.
 								dcc.Graph(figure=figure_fail),
 
-								# Holding point.
 								# dmc.Button("Awaiting Content", variant="default"),
 								# Graph to show lead time data.
 								dcc.Graph(figure = figure_incidents),
