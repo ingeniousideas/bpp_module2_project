@@ -148,3 +148,6 @@ ui-tests/.pnp.*
 terraform/.terraform/
 terraform/terraform.tfstate*
 ansible/inventory.ini
+
+# random
+snaps/

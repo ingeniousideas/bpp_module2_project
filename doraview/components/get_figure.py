@@ -1,68 +1,5 @@
 import plotly.express as px
 
-def fig_bar_multi(dataframe, view):
-
-	if view == "deploy":
-
-		df_fig_bar = dataframe
-
-		# Set figure parameters
-		title = "Total Monthly Deployments by Application"
-		x_values = 'month'
-		y_values = 'count'
-		x_title = "Deployment Month"
-		y_title = "Number of Deployments"
-		bar_color = 'application_id'
-		color_map = None
-
-	elif view == "fail_graph":
-
-		# Calculate percentage of status by month
-		df_status_grouped = dataframe.groupby(['month', 'status']).agg({'status':'count'})
-		df_status_percent = df_status_grouped.groupby(level=0).apply(
-			lambda x: 100 * x / x.sum())
-
-		# Fix the index (drop the duplicate month level)
-		df_status_percent.index = df_status_percent.index.droplevel(1)
-
-		# Rename the column to avoid conflict during reset_index
-		df_status_percent = df_status_percent.rename(columns={'status':'percentage'})
-		df_fig_bar = df_status_percent.reset_index()
-
-		title = "Deployment Failure Rates by Month"
-		x_values = 'month'
-		y_values = 'percentage'
-		x_title = "Failure Month"
-		y_title = "Percentage (%) Outcomes"
-		bar_color = "status"
-		color_map = {
-			"success":"#636EFA",
-			"failed":"#EF553B"
-			}
-
-	fig_bar_multi = px.bar(
-		data_frame=df_fig_bar,
-		title=title,
-		x=x_values,
-		y=y_values,
-		color=bar_color,
-		color_discrete_map = color_map,
-	)
-
-	fig_bar_multi.update_layout(legend_title_text="Legend")
-	fig_bar_multi.update_layout(barmode='stack')
-	fig_bar_multi.update_yaxes(title_text=y_title)
-	fig_bar_multi.update_xaxes(
-		title_text=x_title,
-		tickvals=list(range(1,13)),
-		ticktext=['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-	)
-
-	# Apply Plotly colour pallet
-	fig_bar_multi.update_layout(template="plotly_dark")
-
-	return fig_bar_multi
-
 def fig_bar_single(dataframe, app_id, view):
 
 	if view == "deploy":
@@ -137,6 +74,69 @@ def fig_bar_single(dataframe, app_id, view):
 	fig_bar_single.update_layout(template="plotly_dark")
 
 	return fig_bar_single
+
+def fig_bar_multi(dataframe, view):
+
+	if view == "deploy":
+
+		df_fig_bar = dataframe
+
+		# Set figure parameters
+		title = "Total Monthly Deployments by Application"
+		x_values = 'month'
+		y_values = 'count'
+		x_title = "Deployment Month"
+		y_title = "Number of Deployments"
+		bar_color = 'application_id'
+		color_map = None
+
+	elif view == "fail_graph":
+
+		# Calculate percentage of status by month
+		df_status_grouped = dataframe.groupby(['month', 'status']).agg({'status':'count'})
+		df_status_percent = df_status_grouped.groupby(level=0).apply(
+			lambda x: 100 * x / x.sum())
+
+		# Fix the index (drop the duplicate month level)
+		df_status_percent.index = df_status_percent.index.droplevel(1)
+
+		# Rename the column to avoid conflict during reset_index
+		df_status_percent = df_status_percent.rename(columns={'status':'percentage'})
+		df_fig_bar = df_status_percent.reset_index()
+
+		title = "Deployment Failure Rates by Month"
+		x_values = 'month'
+		y_values = 'percentage'
+		x_title = "Failure Month"
+		y_title = "Percentage (%) Outcomes"
+		bar_color = "status"
+		color_map = {
+			"success":"#636EFA",
+			"failed":"#EF553B"
+			}
+
+	fig_bar_multi = px.bar(
+		data_frame=df_fig_bar,
+		title=title,
+		x=x_values,
+		y=y_values,
+		color=bar_color,
+		color_discrete_map = color_map,
+	)
+
+	fig_bar_multi.update_layout(legend_title_text="Legend")
+	fig_bar_multi.update_layout(barmode='stack')
+	fig_bar_multi.update_yaxes(title_text=y_title)
+	fig_bar_multi.update_xaxes(
+		title_text=x_title,
+		tickvals=list(range(1,13)),
+		ticktext=['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+	)
+
+	# Apply Plotly colour pallet
+	fig_bar_multi.update_layout(template="plotly_dark")
+
+	return fig_bar_multi
 
 def get_scatter_single(dataframe, app_id, view):
 	""" Return scatter figure for a single application id.
