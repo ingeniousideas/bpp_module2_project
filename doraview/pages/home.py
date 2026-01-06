@@ -2,13 +2,15 @@
 import dash
 import dash_mantine_components as dmc
 from dash import Dash, html, dcc, callback, Output, Input
+import pandas as pd
 
 # Framework components
 from components.dag_table import reuse_table
 from components.get_figure import fig_bar_multi, get_scatter_multi
 from components.get_dataframes import figure_dataframe, raw_dataframe
 
-df_apps = pd.read_json('/home/lnx_workspaces/bpp_projects/bpp_module2_project/doraview/data/json/applications.json')
+# Reference for the applications table.
+df_apps = raw_dataframe('apps')
 
 # References for the deploy deployment figure.
 df_deploy_figure = figure_dataframe("deploy")

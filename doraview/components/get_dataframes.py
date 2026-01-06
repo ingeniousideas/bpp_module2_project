@@ -2,7 +2,11 @@ import pandas as pd
 
 def raw_dataframe(view) -> pd.DataFrame:
 
-	if view == "deploy":
+	if view == "apps":
+		raw_file_path = '/home/lnx_workspaces/bpp_projects/bpp_module2_project/doraview/data/json/applications.json'
+		date_columns = ["deployed_at"]
+
+	elif view == "deploy":
 		raw_file_path = '/home/lnx_workspaces/bpp_projects/bpp_module2_project/doraview/data/json/deployment_frequency.json'
 		date_columns = ["deployed_at"]
 
