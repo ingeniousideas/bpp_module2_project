@@ -19,7 +19,7 @@ layout = dmc.AppShell(
 			dmc.Group(
 				[
 					dmc.Burger(id="burger", size="sm", hiddenFrom="sm", opened=False),
-					dmc.Title("Lab DORA Metrics"),
+					dmc.Title("DORA View"),
 				],
 				h="100%",
 				px="md",
