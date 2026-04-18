@@ -6,23 +6,23 @@ def raw_dataframe(view) -> pd.DataFrame:
 	BASE_DIR = Path(__file__).parent.parent
 
 	if view == "apps":
-		raw_file_path = BASE_DIR / 'data/json/applications.json'
+		raw_file_path = BASE_DIR / 'data/applications.json'
 		date_columns = ["deployed_at"]
 
 	elif view == "deploy" or view == "fail_graph":
-		raw_file_path = BASE_DIR / 'data/json/deployment_frequency.json'
+		raw_file_path = BASE_DIR / 'data/deployment_frequency.json'
 		date_columns = ["deployed_at"]
 
 	elif view == "lead":
-		raw_file_path = BASE_DIR / 'data/json/change_lead_time.json'
+		raw_file_path = BASE_DIR / 'data/change_lead_time.json'
 		date_columns = ["committed_at", "deployed_at"]
 
 	elif view == "fail":
-		raw_file_path = BASE_DIR / 'data/json/change_fail.json'
+		raw_file_path = BASE_DIR / 'data/change_fail.json'
 		date_columns = ["detected_at"]
 
 	elif view == "incidents":
-		raw_file_path = BASE_DIR / 'data/json/incidents.json'
+		raw_file_path = BASE_DIR / 'data/incidents.json'
 		date_columns = ["incident_start_time", "incident_end_time"]
 
 	df_raw = pd.read_json(
